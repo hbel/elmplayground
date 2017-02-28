@@ -3,6 +3,7 @@ module Main exposing (..)
 import Html exposing (..)
 import Html.Events exposing (..)
 import Html.Attributes exposing (..)
+import Tools exposing (checkBraces, fib, fac)
 
 
 main : Program Never Model Msg
@@ -29,30 +30,6 @@ init =
 type Msg
     = Do
     | Change String
-    | DoNot
-
-
-cbIter : List Char -> Int -> Bool
-cbIter str braces =
-    if braces < 0 then
-        False
-    else
-        case str of
-            [] ->
-                braces == 0
-
-            head :: tail ->
-                if head == '(' then
-                    cbIter tail (braces + 1)
-                else if head == ')' then
-                    cbIter tail (braces - 1)
-                else
-                    cbIter tail braces
-
-
-checkBraces : String -> Bool
-checkBraces str =
-    cbIter (String.toList str) 0
 
 
 subscriptions : Model -> Sub Msg
@@ -64,13 +41,19 @@ update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
         Do ->
-            ( { model | output = toString (checkBraces model.input) }, Cmd.none )
+            let
+                x =
+                    case String.toInt model.input of
+                        Ok i ->
+                            i
+
+                        Err e ->
+                            0
+            in
+                ( { model | output = toString (fib x) ++ "   " ++ toString (fac x) }, Cmd.none )
 
         Change str ->
             ( { model | input = str }, Cmd.none )
-
-        _ ->
-            ( model, Cmd.none )
 
 
 view : Model -> Html Msg
