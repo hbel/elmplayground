@@ -44,8 +44,24 @@ suite =
                 ]
             , describe "Union"
                 [ test "Union of {1} and {2} contains 1" <| \() -> Expect.true "{1,2} contains 1" (Set.contains 1 (Set.union (Set.singleton 1) (Set.singleton 2)))
-                , test "Union of {1} and {2} contains 2" <| \() -> Expect.true "{1,2} contains 2" (Set.contains 1 (Set.union (Set.singleton 1) (Set.singleton 2)))
+                , test "Union of {1} and {2} contains 2" <| \() -> Expect.true "{1,2} contains 2" (Set.contains 2 (Set.union (Set.singleton 1) (Set.singleton 2)))
                 , test "Union of {1} and {2} contains no 0" <| \() -> Expect.false "{1,2} does not contain 0" (Set.contains 0 (Set.union (Set.singleton 1) (Set.singleton 2)))
+                ]
+            , describe "Intersection"
+                [ test "Intersection of {1} and {2} contains no 1" <| \() -> Expect.false "{1,2} contains no 1" (Set.contains 1 (Set.intersection (Set.singleton 1) (Set.singleton 2)))
+                , test "Intersection of {1} and {2} contains no 2" <| \() -> Expect.false "{1,2} contains no 2" (Set.contains 1 (Set.intersection (Set.singleton 1) (Set.singleton 2)))
+                , test "Intersection of {1} and {2} contains no 0" <| \() -> Expect.false "{1,2} does not contain 0" (Set.contains 0 (Set.intersection (Set.singleton 1) (Set.singleton 2)))
+                , test "Intersection of {1} and {1,2} contains 1" <|
+                    \() ->
+                        Expect.true "{1} contains 1"
+                            (Set.contains 1
+                                (Set.intersection (Set.singleton 1) (Set.union (Set.singleton 1) (Set.singleton 2)))
+                            )
+                ]
+            , describe "Difference"
+                [ test "Difference of {1} and {2} contains 1" <| \() -> Expect.true "{1}\\{2} contains 1" (Set.contains 1 (Set.difference (Set.singleton 1) (Set.singleton 2)))
+                , test "Difference of {1} and {2} contains no 2" <| \() -> Expect.false "{1}\\{2} contains no 2" (Set.contains 2 (Set.difference (Set.singleton 1) (Set.singleton 2)))
+                , test "Difference of {1} and {2} contains no 0" <| \() -> Expect.false "{1}\\{2} does not contain 0" (Set.contains 0 (Set.difference (Set.singleton 1) (Set.singleton 2)))
                 ]
             ]
         ]

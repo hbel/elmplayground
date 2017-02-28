@@ -15,6 +15,16 @@ union s t =
     \x -> (s x) || (t x)
 
 
+intersection : Set -> Set -> Set
+intersection s t =
+    \x -> (s x) && (t x)
+
+
+difference : Set -> Set -> Set
+difference s t =
+    \x -> (s x) && not (t x)
+
+
 contains : Int -> Set -> Bool
 contains y s =
     s y
